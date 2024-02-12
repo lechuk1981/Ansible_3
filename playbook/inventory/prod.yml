@@ -9,3 +9,8 @@ vector:
     vector-01:
      # ansible_connection: docker
       ansible_host: 84.201.166.145
+
+lighthouse:
+  hosts:
+    lighthouse-01:
+      ansible_host: 158.160.66.223

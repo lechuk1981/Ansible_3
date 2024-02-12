@@ -60,8 +60,66 @@
       notify: Start Vector service
 
     - name: Deploy config Vector
+      become: yes
       template:
         src: ./templates/vector.j2
         dest: /etc/vector/vector.toml
-        mode: 0755
+        mode: 0644
       notify: Start Vector service
+
+- name: Install Nginx
+  hosts: lighthouse
+  remote_user: lechuk
+  handlers:
+
+    - name: start-nginx
+      become: true
+      command: nginx
+
+    - name: reload-nginx
+      become: true
+      command: nginx -s reload
+  tasks:
+    - name: NGINX | Install epel-release
+      become: true
+      ansible.builtin.yum:
+        name: epel-release
+        state: present
+    - name: NGINX | Install NGINX
+      become: true
+      ansible.builtin.yum:
+        name: nginx
+        state: present
+    - name: NGINX | Create Config
+      become: true
+      template:
+        src: nginx.conf
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+      notify: start-nginx
+- name: Install Lighthouse
+  hosts: lighthouse
+  remote_user: lechuk
+  handlers:
+    - name: reload-nginx
+      become: true
+      command: nginx -s reload
+  pre_tasks:
+    - name: Lighthouse | Install Git
+      become: true
+      ansible.builtin.yum:
+        name: git
+        state: present
+  tasks:
+    - name: Lighthouse | Copy from github
+      git:
+        repo: "{{ lighthouse_vcs }}"
+        version: master
+        dest: "{{ lighthouse_location_dir }}"
+    - name: Lighthouse | Create lighthouse vector_config
+      become: true
+      template:
+        src: lighthouse.conf
+        dest: /etc/nginx/conf.d/default.conf
+        mode: 0644
+      notify: reload-nginx

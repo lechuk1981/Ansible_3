@@ -1,0 +1,7 @@
+lighthouse_vcs: https://github.com/VKCOM/lighthouse.git
+lighthouse_location_dir: /home/lechuk/lighthouse
+lighthouse_access_log_name: lighthouse_access
+nginx_user: root
+worker_processes: auto
+worker_connections: 2048
+client_max_body_size: 512M
