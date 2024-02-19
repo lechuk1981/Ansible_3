@@ -6,8 +6,8 @@
   - name: vector-role
     src: git@github.com:lechuk1981/vector-role.git
     scm: git
-    version: "0.1.0"
+    version: "0.36.0"
   - name: lighthouse-role
     src: git@github.com:lechuk1981/lighthouse-role.git
     scm: git
-    version: "0.1.0"
+    version: "11.5.0"
